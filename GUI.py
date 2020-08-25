@@ -13,8 +13,8 @@ class TheWindow(QMainWindow):
         super(TheWindow, self).__init__()
         xpos = 75
         ypos = 750
-        width = 600
-        height = 220
+        width = 700
+        height = 230
         self.setGeometry(xpos, ypos, width, height)
         self.setWindowTitle("YouTube Downloader")
         self.initUI()
@@ -54,6 +54,16 @@ class TheWindow(QMainWindow):
 
         self.dirBlock = QtWidgets.QLineEdit(self)
 
+        defaultImage = "/Users/patrickmac/Desktop/code/python/YouTubeDL/thumbnails/default.jpeg"
+        thumbnail = QtGui.QPixmap(defaultImage)
+
+        self.labelPix = QtWidgets.QLabel(self)
+        self.labelPix.setPixmap(thumbnail)
+
+        self.labelTitle = QtWidgets.QLabel(self)
+        self.labelTitle.setText("Place Holder Title")
+
+
         #self.urlBlock.textChanged.connect(lambda:self.textchanged(self.urlBlock))
         #self.startButton.clicked.connect(lambda:self.textchanged(self.urlBlock))
         self.initLayout()
@@ -78,11 +88,13 @@ class TheWindow(QMainWindow):
         self.hboxComboBoxes = QtWidgets.QHBoxLayout()
         self.hboxComboBoxes.addWidget(self.videoCombo)
         self.hboxComboBoxes.addWidget(self.audioCombo)
+        self.hboxComboBoxes.addWidget(self.labelPix)
         self.fbox.addRow(self.hboxComboBoxes)
 
         self.hboxStartExit = QtWidgets.QHBoxLayout()
         self.hboxStartExit.addWidget(self.startButton)
         self.hboxStartExit.addWidget(self.exitButton)
+        self.hboxStartExit.addWidget(self.labelTitle)
         self.fbox.addRow(self.hboxStartExit)
 
         widget.setLayout(self.fbox)
@@ -147,7 +159,6 @@ class TheWindow(QMainWindow):
         author = yt.author
         thumbUrl= yt.thumbnail_url
 
-        print("Title = " + f'{yt.title}')
         print("Title: " + title)
         print ("Views: " + str(views))
         print ("Author: " + author)
