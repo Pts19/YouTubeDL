@@ -1,4 +1,9 @@
+certifi==2020.6.20
+chardet==3.0.4
+idna==2.10
+Pillow==7.2.0
 PyQt5==5.15.0
 PyQt5-sip==12.8.0
 pytube3==9.6.4
 typing-extensions==3.7.4.2
+urllib3==1.25.10

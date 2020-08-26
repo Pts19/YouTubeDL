@@ -6,6 +6,9 @@ from PyQt5.QtGui import *
 import sys
 import time
 import os
+import urllib.request
+from PIL import Image
+
 
 
 class TheWindow(QMainWindow):
@@ -27,6 +30,7 @@ class TheWindow(QMainWindow):
         self.exitButton = QtWidgets.QPushButton(self)
         self.exitButton.setText("Exit")
         self.exitButton.clicked.connect(self.exitbutton)
+
         self.exitButton.adjustSize()
 
         self.labelUrl = QtWidgets.QLabel(self)
@@ -55,13 +59,26 @@ class TheWindow(QMainWindow):
         self.dirBlock = QtWidgets.QLineEdit(self)
 
         defaultImage = "/Users/patrickmac/Desktop/code/python/YouTubeDL/thumbnails/default.jpeg"
-        thumbnail = QtGui.QPixmap(defaultImage)
+        self.thumbnail = QtGui.QPixmap(defaultImage)
 
         self.labelPix = QtWidgets.QLabel(self)
-        self.labelPix.setPixmap(thumbnail)
+        self.labelPix.setPixmap(self.thumbnail)
 
         self.labelTitle = QtWidgets.QLabel(self)
+        self.labelTitle.setFont( QFont('Arial', 18))
         self.labelTitle.setText("Place Holder Title")
+        self.labelTitle.setAlignment(QtCore.Qt.AlignCenter)
+
+        self.labelAuthor = QtWidgets.QLabel(self)
+        self.labelAuthor.setFont( QFont('Arial', 13))
+        self.labelAuthor.setText("Author of Video")
+        self.labelAuthor.setAlignment(QtCore.Qt.AlignCenter)
+
+        self.labelViews = QtWidgets.QLabel(self)
+        self.labelViews.setFont( QFont('Arial', 11))
+        self.labelViews.setText("251K views")
+        self.labelViews.setAlignment(QtCore.Qt.AlignCenter)
+
 
 
         #self.urlBlock.textChanged.connect(lambda:self.textchanged(self.urlBlock))
@@ -86,15 +103,24 @@ class TheWindow(QMainWindow):
         self.fbox.addRow(self.hboxDirectoryBrowse)
 
         self.hboxComboBoxes = QtWidgets.QHBoxLayout()
-        self.hboxComboBoxes.addWidget(self.videoCombo)
-        self.hboxComboBoxes.addWidget(self.audioCombo)
-        self.hboxComboBoxes.addWidget(self.labelPix)
+
+        self.vboxPicTitleViews = QtWidgets.QVBoxLayout()
+        self.vboxPicTitleViews.addWidget(self.labelPix)
+        self.vboxPicTitleViews.addWidget(self.labelTitle)
+        self.vboxPicTitleViews.addWidget(self.labelAuthor)
+        self.vboxPicTitleViews.addWidget(self.labelViews)
+        self.hboxComboBoxes.addLayout(self.vboxPicTitleViews)
+
+        self.vboxCB = QtWidgets.QVBoxLayout()
+        self.vboxCB.addWidget(self.videoCombo)
+        self.vboxCB.addWidget(self.audioCombo)
+        self.hboxComboBoxes.addLayout(self.vboxCB)
+
         self.fbox.addRow(self.hboxComboBoxes)
 
         self.hboxStartExit = QtWidgets.QHBoxLayout()
         self.hboxStartExit.addWidget(self.startButton)
         self.hboxStartExit.addWidget(self.exitButton)
-        self.hboxStartExit.addWidget(self.labelTitle)
         self.fbox.addRow(self.hboxStartExit)
 
         widget.setLayout(self.fbox)
@@ -141,6 +167,15 @@ class TheWindow(QMainWindow):
             self.audioCombo.addItem("WebM - Best Audio Only")
             self.audioCombo.addItem("WebM - Worst Audio Only")
 
+    def updateData(self, yt):
+        urllib.request.urlretrieve(yt.thumbnail_url,
+                    '/Users/patrickmac/Desktop/code/python/YouTubeDL/thumbnails/default.jpg')
+
+        thumbPic = "/Users/patrickmac/Desktop/code/python/YouTubeDL/thumbnails/default.jpg"
+        self.updatedThumb = QtGui.QPixmap(thumbPic)
+
+        self.labelPix.setPixmap(self.updatedThumb)
+
     def textchanged(self, url):
         #self.exitButton.adjustSize()
         userUrl = url.text()
@@ -159,6 +194,7 @@ class TheWindow(QMainWindow):
         author = yt.author
         thumbUrl= yt.thumbnail_url
 
+
         print("Title: " + title)
         print ("Views: " + str(views))
         print ("Author: " + author)
@@ -166,6 +202,7 @@ class TheWindow(QMainWindow):
 
         self.videocombobox(yt)
         self.audiocombobox(yt)
+        self.updateData(yt)
 
 
         #views = yt.views()
