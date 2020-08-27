@@ -65,14 +65,16 @@ class TheWindow(QMainWindow):
         self.labelPix.setPixmap(self.thumbnail)
 
         self.labelTitle = QtWidgets.QLabel(self)
-        self.labelTitle.setFont( QFont('Arial', 18))
+        self.labelTitle.setFont( QFont('Arial', 16))
         self.labelTitle.setText("Place Holder Title")
         self.labelTitle.setAlignment(QtCore.Qt.AlignCenter)
+
 
         self.labelAuthor = QtWidgets.QLabel(self)
         self.labelAuthor.setFont( QFont('Arial', 13))
         self.labelAuthor.setText("Author of Video")
         self.labelAuthor.setAlignment(QtCore.Qt.AlignCenter)
+
 
         self.labelViews = QtWidgets.QLabel(self)
         self.labelViews.setFont( QFont('Arial', 11))
@@ -140,7 +142,6 @@ class TheWindow(QMainWindow):
         print ("Starting Download: ")
 
     def videocombobox(self, yt):
-        #index = self.videoCombo.findText("THIS IS A TEST")
         self.videoCombo.removeItem(0)
 
         if(yt.streams.filter(subtype='mp4')):
@@ -171,43 +172,41 @@ class TheWindow(QMainWindow):
         urllib.request.urlretrieve(yt.thumbnail_url,
                     '/Users/patrickmac/Desktop/code/python/YouTubeDL/thumbnails/default.jpg')
 
+        im = Image.open(r"/Users/patrickmac/Desktop/code/python/YouTubeDL/thumbnails/default.jpg")
+        resizeXY = (300, 170)
+        im = im.resize(resizeXY)
+        im.save(r"/Users/patrickmac/Desktop/code/python/YouTubeDL/thumbnails/default.jpg")
+
         thumbPic = "/Users/patrickmac/Desktop/code/python/YouTubeDL/thumbnails/default.jpg"
         self.updatedThumb = QtGui.QPixmap(thumbPic)
-
         self.labelPix.setPixmap(self.updatedThumb)
 
-    def textchanged(self, url):
-        #self.exitButton.adjustSize()
-        userUrl = url.text()
-        print ("The URL Was: " + userUrl)
-        #YouTube('https://www.youtube.com/watch?v=QDIxi99xbOg').streams.first().download()
+        self.labelTitle.setWordWrap(True)
+        self.labelTitle.setText(yt.title)
+        self.labelAuthor.setText(yt.author)
+        viewsStr = '{:,}'.format(yt.views)
+        self.labelViews.setText(viewsStr)
 
-        time.sleep(2)
+    def textchanged(self, url):
+        userUrl = url.text()
+
         yt = YouTube(userUrl)
-        #video = yt.streams.first()
         #video.download('/Users/patrickmac/Desktop/YouTubeVids')
 
-        #print(yt.streams)
-
-        title = yt.title
-        views = yt.views
-        author = yt.author
-        thumbUrl= yt.thumbnail_url
-
-
-        print("Title: " + title)
-        print ("Views: " + str(views))
-        print ("Author: " + author)
-        print ("Thumbnail Url: " + thumbUrl)
+        # title = yt.title
+        # views = yt.views
+        # author = yt.author
+        # thumbUrl= yt.thumbnail_url
+        #
+        #
+        # print("Title: " + title)
+        # print ("Views: " + str(views))
+        # print ("Author: " + author)
+        # print ("Thumbnail Url: " + thumbUrl)
 
         self.videocombobox(yt)
         self.audiocombobox(yt)
         self.updateData(yt)
-
-
-        #views = yt.views()
-        #print ("The Title Was:" + views)
-        #return yt
 
     def updateLabel(self):
         self.label.adjustSize()
