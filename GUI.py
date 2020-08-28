@@ -57,6 +57,7 @@ class TheWindow(QMainWindow):
         self.browseButton.clicked.connect(self.browsebutton)
 
         self.dirBlock = QtWidgets.QLineEdit(self)
+        self.dirBlock.setText("/Users/patrickmac/Downloads")
 
         defaultImage = "/Users/patrickmac/Desktop/code/python/YouTubeDL/thumbnails/default.jpeg"
         self.thumbnail = QtGui.QPixmap(defaultImage)
@@ -70,21 +71,13 @@ class TheWindow(QMainWindow):
         self.labelTitle.setAlignment(QtCore.Qt.AlignCenter)
 
 
-        self.labelAuthor = QtWidgets.QLabel(self)
-        self.labelAuthor.setFont( QFont('Arial', 13))
-        self.labelAuthor.setText("Author of Video")
-        self.labelAuthor.setAlignment(QtCore.Qt.AlignCenter)
-
-
-        self.labelViews = QtWidgets.QLabel(self)
-        self.labelViews.setFont( QFont('Arial', 11))
-        self.labelViews.setText("251K views")
-        self.labelViews.setAlignment(QtCore.Qt.AlignCenter)
+        self.labelAuthorViews = QtWidgets.QLabel(self)
+        self.labelAuthorViews.setFont( QFont('Arial', 14))
+        self.labelAuthorViews.setText("Author of Video" + "  ‣  " + "000,000 views")
+        self.labelAuthorViews.setAlignment(QtCore.Qt.AlignCenter)
 
 
 
-        #self.urlBlock.textChanged.connect(lambda:self.textchanged(self.urlBlock))
-        #self.startButton.clicked.connect(lambda:self.textchanged(self.urlBlock))
         self.initLayout()
 
     def initLayout(self):
@@ -109,19 +102,19 @@ class TheWindow(QMainWindow):
         self.vboxPicTitleViews = QtWidgets.QVBoxLayout()
         self.vboxPicTitleViews.addWidget(self.labelPix)
         self.vboxPicTitleViews.addWidget(self.labelTitle)
-        self.vboxPicTitleViews.addWidget(self.labelAuthor)
-        self.vboxPicTitleViews.addWidget(self.labelViews)
+        self.vboxPicTitleViews.addWidget(self.labelAuthorViews)
         self.hboxComboBoxes.addLayout(self.vboxPicTitleViews)
 
         self.vboxCB = QtWidgets.QVBoxLayout()
         self.vboxCB.addWidget(self.videoCombo)
         self.vboxCB.addWidget(self.audioCombo)
+        self.vboxCB.addWidget(self.startButton)
         self.hboxComboBoxes.addLayout(self.vboxCB)
 
         self.fbox.addRow(self.hboxComboBoxes)
 
         self.hboxStartExit = QtWidgets.QHBoxLayout()
-        self.hboxStartExit.addWidget(self.startButton)
+        #self.hboxStartExit.addWidget(self.startButton)
         self.hboxStartExit.addWidget(self.exitButton)
         self.fbox.addRow(self.hboxStartExit)
 
@@ -183,9 +176,8 @@ class TheWindow(QMainWindow):
 
         self.labelTitle.setWordWrap(True)
         self.labelTitle.setText(yt.title)
-        self.labelAuthor.setText(yt.author)
         viewsStr = '{:,}'.format(yt.views)
-        self.labelViews.setText(viewsStr)
+        self.labelAuthorViews.setText(yt.author + "  ‣  " + viewsStr + " views")
 
     def textchanged(self, url):
         userUrl = url.text()
