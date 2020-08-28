@@ -124,7 +124,6 @@ class TheWindow(QMainWindow):
         #os.system('explorer.exe "C:\users\%username%\Desktop"')
         dir_ = QtWidgets.QFileDialog.getExistingDirectory(self,
             'Select Download Folder:', '/Users/patrickmac', QtWidgets.QFileDialog.ShowDirsOnly)
-        print(dir_)
         self.dirBlock.setText(dir_)
 
 
@@ -135,7 +134,7 @@ class TheWindow(QMainWindow):
         print ("Starting Download: ")
 
     def videocombobox(self, yt):
-        self.videoCombo.removeItem(0)
+        self.videoCombo.clear()
 
         if(yt.streams.filter(subtype='mp4')):
             self.videoCombo.addItem("MP4 - Highest Quality")
@@ -149,7 +148,7 @@ class TheWindow(QMainWindow):
 
 
     def audiocombobox(self, yt):
-        self.audioCombo.removeItem(0)
+        self.audioCombo.clear()
 
         self.audioCombo.addItem("Download Video Only")
 
