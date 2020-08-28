@@ -1,6 +1,6 @@
 from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow
-from pytube import YouTube
+from pytube import YouTube, Stream
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import sys
@@ -183,15 +183,18 @@ class TheWindow(QMainWindow):
         userUrl = url.text()
 
         yt = YouTube(userUrl)
-        #video.download('/Users/patrickmac/Desktop/YouTubeVids')
+        stream = yt.streams.filter(progressive = True, file_extension = "mp4").first()
+        #stream.download('/Users/patrickmac/Desktop/YouTubeVids')
 
         # title = yt.title
         # views = yt.views
         # author = yt.author
         # thumbUrl= yt.thumbnail_url
+        #defaultTitle = stream.default_filename
+
         #
         #
-        # print("Title: " + title)
+        #print("Title: " + defaultTitle)
         # print ("Views: " + str(views))
         # print ("Author: " + author)
         # print ("Thumbnail Url: " + thumbUrl)
