@@ -133,6 +133,13 @@ class TheWindow(QMainWindow):
     def startdownload(self):
         print ("Starting Download: ")
 
+        videoComboData = self.videoCombo.currentText()
+        audioComboData = self.audioCombo.currentText()
+
+        print("video combo data: " + videoComboData)
+        print("audio combo data: " + audioComboData)
+
+
     def videocombobox(self, yt):
         self.videoCombo.clear()
 
