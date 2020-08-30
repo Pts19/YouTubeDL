@@ -27,6 +27,7 @@ class TheWindow(QMainWindow):
         self.startButton.setText("Start Download")
         self.startButton.clicked.connect(self.startdownload)
 
+
         self.exitButton = QtWidgets.QPushButton(self)
         self.exitButton.setText("Exit")
         self.exitButton.clicked.connect(self.exitbutton)
@@ -76,6 +77,9 @@ class TheWindow(QMainWindow):
         self.labelAuthorViews.setText("Author of Video" + "  ‣  " + "000,000 views")
         self.labelAuthorViews.setAlignment(QtCore.Qt.AlignCenter)
 
+        self.progressBar = QtWidgets.QProgressBar(self)
+        self.progressLabel = QtWidgets.QLabel(self)
+        self.progressLabel.setText("0%")
 
 
         self.initLayout()
@@ -114,7 +118,8 @@ class TheWindow(QMainWindow):
         self.fbox.addRow(self.hboxComboBoxes)
 
         self.hboxStartExit = QtWidgets.QHBoxLayout()
-        #self.hboxStartExit.addWidget(self.startButton)
+        self.hboxStartExit.addWidget(self.progressBar)
+        self.hboxStartExit.addWidget(self.progressLabel)
         self.hboxStartExit.addWidget(self.exitButton)
         self.fbox.addRow(self.hboxStartExit)
 
@@ -131,13 +136,58 @@ class TheWindow(QMainWindow):
         quit()
 
     def startdownload(self):
-        print ("Starting Download: ")
 
         videoComboData = self.videoCombo.currentText()
         audioComboData = self.audioCombo.currentText()
 
-        print("video combo data: " + videoComboData)
-        print("audio combo data: " + audioComboData)
+        # print("video combo data: " + videoComboData)
+        # print("audio combo data: " + audioComboData)
+
+
+
+        if(videoComboData.startswith("MP4")):
+            videoSubtype = 'mp4'
+            if("Highest" in videoComboData):
+                videoQuality = 'highest'
+            if("Lowest" in videoComboData):
+                videoQuality = 'lowest'
+
+        if(videoComboData.startswith("WebM")):
+            videoSubtype = 'webm'
+            if("Highest" in videoComboData):
+                videoQuality = 'highest'
+            if("Lowest" in videoComboData):
+                videoQuality = 'lowest'
+
+        if(audioComboData.startswith("MP4")):
+            audioSubtype = 'mp4'
+            if("Highest" in videoComboData):
+                audioQuality = 'best'
+            if("Lowest" in videoComboData):
+                audioQuality = 'worst'
+
+        if(audioComboData.startswith("WebM")):
+            audioSubtype = 'webm'
+            if("Highest" in videoComboData):
+                audioQuality = 'best'
+            if("Lowest" in videoComboData):
+                audioQuality = 'worst'
+
+        print("Downloading here: "+ self.dirBlock.text())
+
+        userUrl = self.urlBlock.text()
+
+        yt = YouTube(userUrl, on_progress_callback=self.progress_Check)
+        print("::Starting Download::")
+        stream = yt.streams.filter(progressive = True, file_extension = "mp4").first()
+        stream.download("/Users/patrickmac/Desktop/YouTubeVids")
+        print("::Done Downloading::")
+
+
+        # print("\nvideo download type: " + videoSubtype)
+        # print("video quality type: " + videoQuality)
+        # print("\naudio download type: " + audioSubtype)
+        # print("video quality type: " + audioQuality)
 
 
     def videocombobox(self, yt):
@@ -185,19 +235,30 @@ class TheWindow(QMainWindow):
         viewsStr = '{:,}'.format(yt.views)
         self.labelAuthorViews.setText(yt.author + "  ‣  " + viewsStr + " views")
 
+    def progress_Check(self, stream, chunk, bytes_remaining):
+        #Gets the percentage of the file that has been downloaded.
+        size = stream.filesize
+        #print("THE FILE SIZE:  "  + str(size))
+        progress = (100*(size-bytes_remaining))/size
+        progress = progress + 1
+        #print("THE progress :  "  + str(progress))
+        self.progressLabel.setText(str(self.progressBar.text()))
+        self.progressBar.setValue(progress)
+
+
+
     def textchanged(self, url):
         userUrl = url.text()
-
+                                #Variable to update the progressBar with??
         yt = YouTube(userUrl)
-        stream = yt.streams.filter(progressive = True, file_extension = "mp4").first()
-        #stream.download('/Users/patrickmac/Desktop/YouTubeVids')
+        #, on_progress_callback=self.progress_Check)
+        # stream = yt.streams.filter(progressive = True, file_extension = "mp4").first()
+        # stream.download('/Users/patrickmac/Desktop/YouTubeVids')
 
         # title = yt.title
         # views = yt.views
         # author = yt.author
         # thumbUrl= yt.thumbnail_url
-        #defaultTitle = stream.default_filename
-
         #
         #
         #print("Title: " + defaultTitle)
@@ -208,6 +269,7 @@ class TheWindow(QMainWindow):
         self.videocombobox(yt)
         self.audiocombobox(yt)
         self.updateData(yt)
+
 
     def updateLabel(self):
         self.label.adjustSize()
