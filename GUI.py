@@ -140,66 +140,46 @@ class TheWindow(QMainWindow):
         videoComboData = self.videoCombo.currentText()
         audioComboData = self.audioCombo.currentText()
 
-        # print("video combo data: " + videoComboData)
-        # print("audio combo data: " + audioComboData)
-
-
-
-        if(videoComboData.startswith("MP4")):
-            videoSubtype = 'mp4'
-            if("Highest" in videoComboData):
-                videoQuality = 'highest'
-            if("Lowest" in videoComboData):
-                videoQuality = 'lowest'
-
-        if(videoComboData.startswith("WebM")):
-            videoSubtype = 'webm'
-            if("Highest" in videoComboData):
-                videoQuality = 'highest'
-            if("Lowest" in videoComboData):
-                videoQuality = 'lowest'
-
-        if(audioComboData.startswith("MP4")):
-            audioSubtype = 'mp4'
-            if("Highest" in videoComboData):
-                audioQuality = 'best'
-            if("Lowest" in videoComboData):
-                audioQuality = 'worst'
-
-        if(audioComboData.startswith("WebM")):
-            audioSubtype = 'webm'
-            if("Highest" in videoComboData):
-                audioQuality = 'best'
-            if("Lowest" in videoComboData):
-                audioQuality = 'worst'
-
         userUrl = self.urlBlock.text()
 
         yt = YouTube(userUrl, on_progress_callback=self.progress_Check)
+        print(yt.streams.all())
         print("::Starting Download::")
         if(videoComboData.startswith("MP4")):
-            stream = yt.streams.filter(progressive = True, file_extension = "mp4").first()
-            stream.download("/Users/patrickmac/Desktop/YouTubeVids")
+            if("Highest" in videoComboData):
+                stream = yt.streams.filter(progressive = True, file_extension = "mp4").get_highest_resolution()
+                stream.download("/Users/patrickmac/Desktop/YouTubeVids")
+            if("Lowest" in videoComboData):
+                stream = yt.streams.filter(progressive = True, file_extension = "mp4").get_lowest_resolution()
+                stream.download("/Users/patrickmac/Desktop/YouTubeVids")
+
 
         if(videoComboData.startswith("WebM")):
-            stream = yt.streams.filter(progressive = True, file_extension = "webm").first()
-            stream.download("/Users/patrickmac/Desktop/YouTubeVids")
+            if("Highest" in videoComboData):
+                stream = yt.streams.filter(progressive = True, file_extension = "webm").get_highest_resolution()
+                stream.download("/Users/patrickmac/Desktop/YouTubeVids")
+            if("Lowest" in videoComboData):
+                stream = yt.streams.filter(progressive = True, file_extension = "webm").get_lowest_resolution()
+                stream.download("/Users/patrickmac/Desktop/YouTubeVids")
 
         if(audioComboData.startswith("MP4")):
-            stream = yt.streams.filter(only_audio = True, file_extension = "mp4", ).first()
-            stream.download("/Users/patrickmac/Desktop/YouTubeVids")
+            if("Best" in audioComboData):
+                stream = yt.streams.filter(progressive = True, file_extension = "webm").get_highest_resolution()
+                stream.download("/Users/patrickmac/Desktop/YouTubeVids")
+            if("Worst" in audioComboData):
+                stream = yt.streams.filter(progressive = True, file_extension = "webm").get_lowest_resolution()
+                stream.download("/Users/patrickmac/Desktop/YouTubeVids")
 
-        if(audioComboData.startswith("MP4")):
-            stream = yt.streams.filter(only_audio = True, file_extension = "webm", ).first()
-            stream.download("/Users/patrickmac/Desktop/YouTubeVids")
+        if(audioComboData.startswith("WebM")):
+            if("Best" in audioComboData):
+                stream = yt.streams.filter(progressive = True, file_extension = "webm").get_highest_resolution()
+                stream.download("/Users/patrickmac/Desktop/YouTubeVids")
+            if("Worst" in audioComboData):
+                stream = yt.streams.filter(progressive = True, file_extension = "webm").get_lowest_resolution()
+                stream.download("/Users/patrickmac/Desktop/YouTubeVids")
 
         print("::Done Downloading::")
 
-
-        # print("\nvideo download type: " + videoSubtype)
-        # print("video quality type: " + videoQuality)
-        # print("\naudio download type: " + audioSubtype)
-        # print("video quality type: " + audioQuality)
 
 
     def videocombobox(self, yt):
